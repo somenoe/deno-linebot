@@ -1,18 +1,21 @@
 'use strict';
 import "https://deno.land/x/dotenv@v3.2.2/load.ts";
-import { linebot } from "https://deno.land/x/linebot@v1.1.0/mod.ts";
+// import { linebot } from "https://deno.land/x/linebot@v1.1.0/mod.ts";
+import { Client } from 'npm:@line/bot-sdk';
+
 import { opine, json } from 'https://deno.land/x/opine@1.8.0/mod.ts';
 
 const endpointToWebHook = 'api/webhook';
-const options = {
-  channelId: Deno.env.get('LINE_CHANNEL_ID'),
-   channelSecret: Deno.env.get('LINE_CHANNEL_SECRET'),
-   channelAccessToken: Deno.env.get('LINE_CHANNEL_TOKEN'),
-   verify: true
-};
-const bot = linebot(options);
+
+const LINE_CHANNEL_SECRET = Deno.env.get('LINE_CHANNEL_SECRET')||""
+const LINE_CHANNEL_TOKEN = Deno.env.get('LINE_CHANNEL_TOKEN')||""
+
+const bot = new Client({
+  channelSecret: LINE_CHANNEL_SECRET,
+  channelAccessToken: LINE_CHANNEL_TOKEN,
+});
 const app = opine();
-const linebotParser = bot.parser(json);
+const linebotParser = bot.
 
 app.post(`/${endpointToWebHook}`, linebotParser);
 
